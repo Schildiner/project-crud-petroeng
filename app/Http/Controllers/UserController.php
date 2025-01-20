@@ -30,11 +30,13 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $created = User::create([
-            "name"=> $request->input(   "name")
+            "name"=> $request->input(   "name"),
+            "email"=> $request->input(   "email"),
+            "password"=> password_hash($request->input("password"), PASSWORD_DEFAULT),
         ]);
 
         if ($created) {
-            return redirect()->route('users.index');
+            return redirect()->route('users.index')->with('message','Usuário cadastrado com sucesso!');;
         }
 
         return redirect()->back()->with("message","Erro");
@@ -66,7 +68,7 @@ class UserController extends Controller
         $updated = User::where('id', $id)->update($request->except(['_method', '_token']));
 
         if ($updated) {
-            return redirect()->route('users.index');
+            return redirect()->route('users.index')->with('message','Usuário cadastrado com sucesso!');;
         }
 
         return redirect()->back()->with("message","Erro Update");
